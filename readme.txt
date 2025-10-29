@@ -1,3 +1,5 @@
+Documentação:
+
 Cria pasta flask-server
 Cria pasta client
 Cria arquivo server.py na pasta flask-server
@@ -63,3 +65,19 @@ teria que colocar cada rota no vite! Para evitar isso, podemos fazer:
 O rewrite vai remover o /api em frente a rota e mandar para a rota desejada. Dessa forma, no front, sempre que for requisitar o back é 
 necessário chamar: fetch('api/members'), ou qualquer outra rota iniciando com api/, e funcionará!
 
+==================================================================================================================================
+Clonando o projeto do GIT:
+    git clone https://github.com/igor-merten/SistemaPET.git
+Aí entra na pasta PETs:
+    cd client/PETS
+E instala as dependências:
+    npm install
+Abre outro terminal para o back:
+    cd ./flask-server
+Cria e roda o ambiente virtual
+    python -m venv venv
+    venv\Scripts\activate
+Agora é só instalar as dependências:
+    pip install -r requirements.txt
+E rodar o servidor:
+    python server.py
