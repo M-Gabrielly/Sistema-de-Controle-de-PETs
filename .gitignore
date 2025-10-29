@@ -1,0 +1,24 @@
+# Node
+node_modules/
+dist/
+.vite/
+
+# Python
+__pycache__/
+venv/
+*.pyc
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Ambiente local do Vite
+client/PETS/node_modules/
+client/PETS/.vite/
+
+# Arquivos de build temporários
+*.log
