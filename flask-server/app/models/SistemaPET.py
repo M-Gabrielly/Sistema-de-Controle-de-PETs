@@ -25,4 +25,4 @@ class SistemaPET:
         for pet in self.lista:
             if pet.id == id:
                 return pet
-        return 'Nenhum PET encontrado!'
+        return None

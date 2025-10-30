@@ -11,8 +11,18 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
-    errorElement: <NotFoundPage />
+    element: (
+      <>
+        <Navbar />
+        <App />
+      </>
+      ),
+    errorElement: (
+      <>
+        <Navbar />
+        <NotFoundPage />
+      </>
+      ),
   },
 ], {
   basename: import.meta.env.BASE_URL
@@ -20,7 +30,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Navbar />
     <RouterProvider router = {router} />
   </StrictMode>,
 )

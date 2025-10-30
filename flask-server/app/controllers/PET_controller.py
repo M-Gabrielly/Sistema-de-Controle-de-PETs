@@ -18,7 +18,35 @@ def criar_pet():
     
     return jsonify({"message": "ok"}), 201
 
+@pet_bp.route("/atualiza_status", methods=['POST'])
+def atualiza_status():
+    # Pega json enviado do front
+    data = request.get_json()
+    print("Valores recebidos:", data)
+
+    # verifica se status é válido
+    status_validos = ["Atendido", "Aguardando atendimento", "Em consulta"]
+    status = data.get("status")
+    
+    if not status or status not in status_validos:
+        return jsonify({"message": "Status inválido! Deve ser: Atendido, Aguardando atendimento ou Em consulta"}), 400
+
+    # Busca o pet
+    pet_selecionado = sistema.buscarPorId(data.get("id"))
+    
+    if pet_selecionado is None:
+        return jsonify({"message": "Nenhum PET encontrado"}), 404
+
+    # Atualiza o status
+    pet_selecionado.status = status
+    
+    print("Pet atualizado:", pet_selecionado)
+    
+    return jsonify({"message": "Status atualizado com sucesso!"}), 200
+
 @pet_bp.route("/listar_pets", methods=["GET"])
 def listar_pets():
+    # Pega lista de pets do SistemaPET.py
     pets = sistema.listarPETs()
+    print(pets)
     return jsonify({"pets": pets}), 200

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import StatusDropdown from './components/StatusDropdown';
 
 function App() {
   
@@ -50,40 +51,75 @@ function App() {
 
   return (
     <>
-      <div>
-        {(typeof data.pets === 'undefined') ? (
-          <p>Loading...</p>
-        ) : (
-          data.pets.map((pet, i) => {
-            return (<p key={i}>{pet.nome}</p>)
-          })
-        )}
-        <h3>Cadastra PET</h3>
+      <div id='content'>
+        <div id="box-content">
+          {typeof data.pets === 'undefined' ? (
+            <p className="loading">Carregando...</p>
+          ) : (
+            <div className="pet-container">
+              <h2 className="pet-title">Lista de PETs</h2>
 
-        <form onSubmit={handleSubmit} id='cadastroPet'>
-          <label>
-            Nome:
-            <input id='nome' name='nome' />
-          </label>
-          <label>
-            Idade:
-            <input id='idade' name='idade' />
-          </label>
-          <label>
-            Espécie:
-            <input id='especie' name='especie' />
-          </label>
-          <label>
-            Status:
-            <select id='status' name='status'>
-              <option value=""></option>
-              <option value="Aguardando atendimento">Aguardando atendimento</option>
-              <option value="Em consulta">Em consulta</option>
-              <option value="Atendido">Atendido</option>
-            </select>
-          </label>
-          <button type='submit'>Cadastrar PET!</button>
-        </form>
+              <div className="pet-table-wrapper">
+                <table className="pet-table">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Idade</th>
+                      <th>Espécie</th>
+                      <th>Status</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.pets.map((pet, i) => (
+                      <tr key={i}>
+                        <td>{pet.nome}</td>
+                        <td>{pet.idade} {pet.idade === 1 ? ' ano' : ' anos'}</td>
+                        <td>{pet.especie}</td>
+                        <td>
+                          <StatusDropdown status={pet.status} id={pet.id}/>
+                        </td>
+                        <td>
+                          <div className="actions">
+                            {/* <button className="btn btn-edit">Editar</button> */}
+                            <button className="btn btn-delete">Deletar</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* <h3>Cadastra PET</h3>
+
+          <form onSubmit={handleSubmit} id='cadastroPet'>
+            <label>
+              Nome:
+              <input id='nome' name='nome' />
+            </label>
+            <label>
+              Idade:
+              <input id='idade' name='idade' />
+            </label>
+            <label>
+              Espécie:
+              <input id='especie' name='especie' />
+            </label>
+            <label>
+              Status:
+              <select id='status' name='status'>
+                <option value=""></option>
+                <option value="Aguardando atendimento">Aguardando atendimento</option>
+                <option value="Em consulta">Em consulta</option>
+                <option value="Atendido">Atendido</option>
+              </select>
+            </label>
+            <button type='submit'>Cadastrar PET!</button>
+          </form> */}
+        </div>
       </div>
     </>
   )
