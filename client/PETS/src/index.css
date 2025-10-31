@@ -300,7 +300,7 @@ Paleta:
 #cadastroPet button {
   margin-top: 10px;
   padding: 10px 0;
-  background-color: #007bff;
+  background-color: #09567A;
   color: white;
   font-weight: 600;
   border: none;
@@ -310,7 +310,7 @@ Paleta:
 }
 
 #cadastroPet button:hover {
-  background-color: #0069d9;
+  background-color: rgb(57, 129, 206);
 }
 
 #cadastroPet button:active {

@@ -13,8 +13,5 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '') // remove o /api antes de enviar pro Flask
       },
     },
-  },
-  optimizeDeps: {
-    force: true
   }
 })

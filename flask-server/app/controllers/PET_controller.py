@@ -20,12 +20,12 @@ def criar_pet():
     
     # Verifica se o status é válido
     status_validos = ["Atendido", "Aguardando atendimento", "Em consulta"]
-    status = data.get("status")
+    # status = 
     
-    if status not in status_validos:
-        return jsonify({"message": f"Status inválido! Use: {', '.join(status_validos)}"}), 400
+    if data.get("status") not in status_validos:
+        return jsonify({"message": "Status inválido!"}), 400
     
-    sistema.cadastrarPET(data.get("nome"), data.get("idade"), data.get("especie"), status)
+    sistema.cadastrarPET(data.get("nome"), data.get("idade"), data.get("especie"), data.get("status"))
     return jsonify({"message": "Pet criado com sucesso!"}), 201
 
 @pet_bp.route("/atualiza_status", methods=['POST'])
@@ -36,10 +36,9 @@ def atualiza_status():
 
     # verifica se status é válido
     status_validos = ["Atendido", "Aguardando atendimento", "Em consulta"]
-    status = data.get("status")
     
-    if not status or status not in status_validos:
-        return jsonify({"message": "Status inválido! Deve ser: Atendido, Aguardando atendimento ou Em consulta"}), 400
+    if not data.get("status") or data.get("status") not in status_validos:
+        return jsonify({"message": "Status inválido!"}), 400
 
     # Busca o pet
     pet_selecionado = sistema.buscarPorId(data.get("id"))
@@ -48,9 +47,7 @@ def atualiza_status():
         return jsonify({"message": "Nenhum PET encontrado"}), 404
 
     # Atualiza o status
-    pet_selecionado.status = status
-    
-    print("Pet atualizado:", pet_selecionado)
+    pet_selecionado.status = data.get("status")
     
     return jsonify({"message": "Status atualizado com sucesso!"}), 200
 
