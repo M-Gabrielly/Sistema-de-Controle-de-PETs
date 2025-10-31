@@ -1,6 +1,9 @@
 import { useState } from "react"
+import { MensagemAPI } from '../context/MensagemAPI';
 
 function StatusDropdown(received) {
+  const { showMessage } = MensagemAPI();
+
   const [open, setOpen] = useState(false)
   const [status, setStatus] = useState(received.status)
   const petId = received.id;
@@ -26,17 +29,22 @@ function StatusDropdown(received) {
       const data = await res.json();
       
       if (!res.ok) {
-        throw new Error(`Erro ${res.status}: ${data.message}`);
+        // throw new Error(`Erro ${res.status}: ${data.message}`);
+        throw new Error(`${data.message}`);
       }
       
       return data;
     })
     .then(responseData  => {
       //deu tudo certo
+      showMessage("Status editado com sucesso!", "success");
       console.log("Resposta do servidor:", responseData );
     })
     // mostra erro
-    .catch(err => console.error(err));
+    .catch(err => {
+        showMessage(`Erro ao editar status: ${err.message}`, "error");
+        console.error(err)
+    });
   }
 
   return (

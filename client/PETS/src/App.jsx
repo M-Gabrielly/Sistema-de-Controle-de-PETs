@@ -9,45 +9,11 @@ function App() {
   useEffect(() => {
     fetch("api/listar_pets")
       .then(res => res.json())
-      .then(data => {setData(data); console.log(data)})
+      .then(data => {
+        setData(data); 
+        console.log(data)
+      })
   }, [])
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const nome = e.target.nome.value;
-    const idade = e.target.idade.value;
-    const especie = e.target.especie.value;
-    const status = e.target.status.value;
-
-    const petData = {
-      nome: nome,
-      idade: idade,
-      especie: especie,
-      status: status
-    };
-
-    fetch("api/criar_pet", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(petData)
-    })
-    .then(async res => {
-      // erro requisição
-      const errorText = await res.json();
-      if (!res.ok) throw new Error(`Erro ${res.status}: ${errorText.message}`);
-      return res.json();
-    })
-    .then(newData => {
-      //deu tudo certo
-      console.log("Resposta do servidor:", newData);
-    })
-    // mostra erro
-    .catch(err => console.error(err));
-
-    e.target.reset()
-  }
 
   return (
     <>

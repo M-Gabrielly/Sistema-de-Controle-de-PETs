@@ -11,12 +11,21 @@ def criar_pet():
     data = request.get_json()
     print("Pet recebido:", data)
 
-    #verifica se nome é nulo
-    if data.get("nome") == '':
-        print("não dai nao")
-        return jsonify({"message": "Nome do PET é obrigatório!"}), 400
+    # Verifica se todos os campos foram preenchidos
+    campos_obrigatorios = ["nome", "idade", "especie", "status"]
     
-    return jsonify({"message": "ok"}), 201
+    for campo in campos_obrigatorios:
+        if not data.get(campo) or data.get(campo) == '':
+            return jsonify({"message": f"O campo '{campo}' é obrigatório!"}), 400
+    
+    # Verifica se o status é válido
+    status_validos = ["Atendido", "Aguardando atendimento", "Em consulta"]
+    status = data.get("status")
+    
+    if status not in status_validos:
+        return jsonify({"message": f"Status inválido! Use: {', '.join(status_validos)}"}), 400
+    
+    return jsonify({"message": "Pet criado com sucesso!"}), 201
 
 @pet_bp.route("/atualiza_status", methods=['POST'])
 def atualiza_status():
