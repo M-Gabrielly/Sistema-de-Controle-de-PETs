@@ -17,7 +17,8 @@ body{
     padding-top: 10px;
     width: 100%;
     padding-bottom: 10px;
-    background-color: #09567A;
+    background-color: #fff;
+    border-bottom: 1px solid #09567A
 }
 
 #navbar ul{
@@ -34,7 +35,7 @@ body{
 }
 
 #navbar ul li a{
-    color: #A2E4F5;
+    color: #09567A;
     text-decoration: none !important;
     padding: 14px 20px 14px 20px;
     display: block;
@@ -42,22 +43,22 @@ body{
 }
 
 #navbar ul li a:hover{
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid #09567A;
     padding-bottom: 5px
 }
 
 #navbar ul li a.active{
-    color: #fff;
+    color: #4bacda;
     font-weight: 500;
     /* border-radius: 4px; */
 }
 
 #content{
     width: 100%;
-    margin-top: 30px;
-    min-height: 450px;
-    margin-bottom: 0px;
-    padding-bottom: 40px;
+    /* margin-top: 30px; */
+    /* min-height: 450px; */
+    /* margin-bottom: 0px; */
+    /* padding-bottom: 40px; */
 }
 
 #box-content{
@@ -75,11 +76,11 @@ body{
 
 .pet-container {
   width: 90%;
-  margin: 40px auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 20px;
 }
 
-.pet-title {
+h2 {
   text-align: center;
   margin-bottom: 20px;
   font-size: 22px;
@@ -187,29 +188,6 @@ body{
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* .status-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 5px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.status-green {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.status-yellow {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.status-blue {
-  background-color: #d0e4ff;
-  color: #007bff;
-} */
-
 .status-consulta{
   background-color: #d0e4ff;
   color: #007bff;
@@ -285,8 +263,7 @@ Paleta:
 
 #cadastroPet {
   max-width: 400px;
-  margin: 40px auto;
-  padding: 20px 25px;
+  padding: 0px 25px;
   background-color: #ffffff;
   border-radius: 12px;
   display: flex;

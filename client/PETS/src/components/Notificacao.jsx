@@ -10,9 +10,10 @@ export default function Notificacao() {
     <div
       style={{
         position: 'fixed',
-        top: '20px',
-        right: '20px',
-        padding: '12px 20px',
+        // top: '20px',
+        bottom: '20px',
+        left: '50%',
+        padding: '10px 15px',
         borderRadius: '8px',
         color: message.type === 'error' ? '#721c24' : '#155724',
         backgroundColor: message.type === 'error' ? '#f8d7da' : '#d4edda',
@@ -22,6 +23,8 @@ export default function Notificacao() {
         boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
         zIndex: 9999,
         fontWeight: 500,
+        fontSize: '14px',
+        transform: 'translate(-50%, -50%)',
       }}
     >
       {message.text}

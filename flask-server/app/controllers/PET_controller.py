@@ -25,6 +25,7 @@ def criar_pet():
     if status not in status_validos:
         return jsonify({"message": f"Status inválido! Use: {', '.join(status_validos)}"}), 400
     
+    sistema.cadastrarPET(data.get("nome"), data.get("idade"), data.get("especie"), status)
     return jsonify({"message": "Pet criado com sucesso!"}), 201
 
 @pet_bp.route("/atualiza_status", methods=['POST'])

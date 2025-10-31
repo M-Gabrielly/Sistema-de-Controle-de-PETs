@@ -52,7 +52,7 @@ function NovoPET() {
   return (
     <div className="content">
         <div id="box-content">
-            <h3>Cadastra PET</h3>
+            <h2>Cadastra PET</h2>
 
           <form onSubmit={handleSubmit} id='cadastroPet'>
             <label>

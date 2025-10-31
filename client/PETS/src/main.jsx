@@ -34,6 +34,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
+      {/* <Notificacao /> */}
         <NovoPET />
       </>
       ),
