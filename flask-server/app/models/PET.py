@@ -1,12 +1,14 @@
 class PET:
-    def __init__(self, id, nome, idade, especie, status):
+    def __init__(self, id, nome, idade, especie, status, dono_id=None):
         self.id = id
         self.nome = nome
         self.idade = idade
         self.especie = especie
         self.status = status
+        # dono_id referencia um Cliente.id (opcional)
+        self.dono_id = dono_id
 
-    def editarPet(self, nome=None, idade=None, especie=None, status=None):
+    def editarPet(self, nome=None, idade=None, especie=None, status=None, dono_id=None):
         if nome is not None:
             self.nome = nome
         if idade is not None:
@@ -15,6 +17,8 @@ class PET:
             self.especie = especie
         if status is not None:
             self.status = status
+        if dono_id is not None:
+            self.dono_id = dono_id
 
     def to_array(self):
         return {
@@ -22,7 +26,8 @@ class PET:
             "nome": self.nome,
             "idade": self.idade,
             "especie": self.especie,
-            "status": self.status
+            "status": self.status,
+            "dono_id": self.dono_id
         }
 
     def __str__(self):
