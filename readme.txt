@@ -67,7 +67,7 @@ necessário chamar: fetch('api/members'), ou qualquer outra rota iniciando com a
 
 ==================================================================================================================================
 Clonando o projeto do GIT:
-    git clone https://github.com/igor-merten/SistemaPET.git
+    git clone https://github.com/M-Gabrielly/Sistema-de-Controle-de-PETs
 Aí entra na pasta PETs:
     cd client/PETS
 E instala as dependências:
