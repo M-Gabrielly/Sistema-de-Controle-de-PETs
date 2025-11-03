@@ -9,6 +9,7 @@ import Notificacao from './components/Notificacao.jsx'
 import NotFoundPage from './components/NotFoundPage.jsx'
 import Navbar from './components/Navbar.jsx'
 import NovoPET from './components/NovoPET.jsx'
+import NovoUsuario from './components/NovoCliente.jsx'
 
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -34,8 +35,23 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-      {/* <Notificacao /> */}
         <NovoPET />
+      </>
+      ),
+    errorElement: (
+      <>
+        <Navbar />
+        <NotFoundPage />
+      </>
+      ),
+  },
+  
+  {
+    path: '/Usuario',
+    element: (
+      <>
+        <Navbar />
+        <NovoUsuario />
       </>
       ),
     errorElement: (

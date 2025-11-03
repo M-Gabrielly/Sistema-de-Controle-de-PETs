@@ -1,21 +1,36 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { MensagemAPI } from "../context/MensagemAPI";
 
 function NovoPET() {
-    const { showMessage } = MensagemAPI();
+  const { showMessage } = MensagemAPI();
+  const [clientes, setClientes] = useState([]);
 
-    const handleSubmit = (e) => {
+  useEffect(() => {
+    fetch("api/listar_clientes")
+      .then(res => {
+        console.log(res)
+        return res.json()
+      })
+      .then(data => {
+        console.log(data)
+        setClientes(data.clientes);
+      })
+  }, [])
+
+  const handleSubmit = (e) => {
     e.preventDefault()
     const nome = e.target.nome.value;
     const idade = e.target.idade.value;
     const especie = e.target.especie.value;
     const status = e.target.status.value;
+    const dono_id = e.target.dono_id.value;
 
     const petData = {
         nome: nome,
         idade: idade,
         especie: especie,
-        status: status
+        status: status,
+        dono_id: dono_id
     };
 
     fetch("api/criar_pet", {
@@ -47,7 +62,7 @@ function NovoPET() {
     });
 
     e.target.reset()
-}
+  }
 
   return (
     <div className="content">
@@ -74,6 +89,15 @@ function NovoPET() {
                 <option value="Aguardando atendimento">Aguardando atendimento</option>
                 <option value="Em consulta">Em consulta</option>
                 <option value="Atendido">Atendido</option>
+              </select>
+            </label>
+            <label>
+              Clientes:
+              <select id='clientes' name='dono_id'>
+                <option value=""></option>
+                {clientes.map((cliente) => {
+                  return (<option key={cliente.id} value={cliente.id}>{cliente.nome}</option>)
+                })}
               </select>
             </label>
             <button type='submit'>Cadastrar PET!</button>

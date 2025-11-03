@@ -21,7 +21,7 @@ function Navbar() {
                     <NavLink 
                     to={'/Usuario'}
                     className={({ isActive }) => isActive ? 'active' : ''}
-                    > Usuário </NavLink>
+                    > Cadastrar Cliente </NavLink>
                 </li>
             </ul>
         </nav>
