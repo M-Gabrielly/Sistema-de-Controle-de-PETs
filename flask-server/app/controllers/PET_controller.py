@@ -29,7 +29,7 @@ def criar_pet():
     # Se veio dono_id, valida existência
     dono_id = data.get("dono_id")
     if dono_id is not None:
-        dono = sistema.buscarClientePorId(dono_id)
+        dono = sistema.buscarClientePorId(int(dono_id))
         if dono is None:
             return jsonify({"message": "dono_id inválido: cliente não encontrado"}), 400
 
