@@ -32,8 +32,8 @@ function App() {
                       <th>Nome</th>
                       <th>Idade</th>
                       <th>Espécie</th>
+                      <th>Dono</th>
                       <th>Status</th>
-                      <th>Ações</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -42,14 +42,9 @@ function App() {
                         <td>{pet.nome}</td>
                         <td>{pet.idade} {pet.idade === 1 ? ' ano' : ' anos'}</td>
                         <td>{pet.especie}</td>
+                        <td>{pet.dono?.nome || ""}</td>
                         <td>
                           <StatusDropdown status={pet.status} id={pet.id}/>
-                        </td>
-                        <td>
-                          <div className="actions">
-                            {/* <button className="btn btn-edit">Editar</button> */}
-                            <button className="btn btn-delete">Deletar</button>
-                          </div>
                         </td>
                       </tr>
                     ))}
@@ -58,33 +53,6 @@ function App() {
               </div>
             </div>
           )}
-
-          {/* <h3>Cadastra PET</h3>
-
-          <form onSubmit={handleSubmit} id='cadastroPet'>
-            <label>
-              Nome:
-              <input id='nome' name='nome' />
-            </label>
-            <label>
-              Idade:
-              <input id='idade' name='idade' />
-            </label>
-            <label>
-              Espécie:
-              <input id='especie' name='especie' />
-            </label>
-            <label>
-              Status:
-              <select id='status' name='status'>
-                <option value=""></option>
-                <option value="Aguardando atendimento">Aguardando atendimento</option>
-                <option value="Em consulta">Em consulta</option>
-                <option value="Atendido">Atendido</option>
-              </select>
-            </label>
-            <button type='submit'>Cadastrar PET!</button>
-          </form> */}
         </div>
       </div>
     </>

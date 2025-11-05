@@ -42,18 +42,14 @@ function NovoPET() {
     })
     .then(async res => {
         const data = await res.json();
-        
         if (!res.ok) {
-            // throw new Error(`Erro ${res.status}: ${data.message}`);
             throw new Error(`${data.message}`);
         }
 
         showMessage("PET cadastrado com sucesso!", "success");
-        
         return data;
     })
     .then(newData => {
-        // Deu tudo certo
         console.log("Resposta do servidor:", newData);
     })
     .catch(err => {
@@ -67,7 +63,7 @@ function NovoPET() {
   return (
     <div className="content">
         <div id="box-content">
-            <h2>Cadastra PET</h2>
+          <h2>Cadastra PET</h2>
 
           <form onSubmit={handleSubmit} id='cadastroPet'>
             <label>

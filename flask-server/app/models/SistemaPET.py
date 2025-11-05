@@ -1,6 +1,6 @@
 from .PET import PET
 from .Cliente import Cliente
-from .User import User
+# from .User import User
 import random
 
 class SistemaPET:
@@ -12,7 +12,7 @@ class SistemaPET:
             PET(4, "Luna", 1, "Gato", "Aguardando atendimento", dono_id=1004),
             PET(5, "Thor", 4, "Cachorro", "Atendido", dono_id=1005),
         ]
-        # lista de clientes (exemplos iniciais)
+        
         self.clientes = [
             Cliente(1001, "Ana Silva", "(11)99999-0001"),
             Cliente(1002, "Bruno Costa", "(11)98888-0002"),
@@ -20,18 +20,36 @@ class SistemaPET:
             Cliente(1004, "Diego Souza", "(31)96666-0004"),
             Cliente(1005, "Eva Pereira", "(41)95555-0005"),
         ]
-        # usuários (para autenticação mínima)
-        self.users = []
+        
+        # self.users = []
 
+
+    ### métodos PETS ###
     def cadastrarPET(self, nome, idade, especie, status, dono_id=None):
         id = random.randint(1000, 9999)
 
         pet = PET(id, nome, idade, especie, status, dono_id=dono_id)
         self.lista.append(pet)
-        print("PET cadastrado!")
 
     def listarPETs(self):
-        return [pet.to_array() for pet in self.lista]
+        lista_retorno = []
+        for pet in self.lista:
+            pet_retorno = pet.to_array()
+            
+            # Se o pet tem um dono_id, busca os dados do cliente
+            if pet.dono_id:
+                cliente = self.buscarClientePorId(int(pet.dono_id))
+                if cliente:
+                    pet_retorno['dono'] = cliente.to_array()
+                else:
+                    pet_retorno['dono'] = None
+            else:
+                pet_retorno['dono'] = None
+                
+            del pet_retorno['dono_id']
+            lista_retorno.append(pet_retorno)
+        
+        return lista_retorno
 
     def buscarPorId(self, id):
         for pet in self.lista:
@@ -39,12 +57,11 @@ class SistemaPET:
                 return pet
         return None
 
-    # --- métodos simples para clientes ---
+    ### métodos clientes ###
     def cadastrarCliente(self, nome, telefone):
         id = random.randint(1000, 9999)
         cliente = Cliente(id, nome, telefone)
         self.clientes.append(cliente)
-        print("Cliente cadastrado!")
 
     def listarClientes(self):
         return [c.to_array() for c in self.clientes]
@@ -55,22 +72,21 @@ class SistemaPET:
                 return c
         return None
 
-    # --- métodos simples para usuários ---
-    def cadastrarUser(self, username, password_hash):
-        id = random.randint(1000, 9999)
-        user = User(id, username, password_hash)
-        self.users.append(user)
-        print("User cadastrado!")
-        return user
+    ### métodos usuários ###
+    # def cadastrarUser(self, username, password_hash):
+    #     id = random.randint(1000, 9999)
+    #     user = User(id, username, password_hash)
+    #     self.users.append(user)
+    #     return user
 
-    def buscarUserPorUsername(self, username):
-        for u in self.users:
-            if u.username == username:
-                return u
-        return None
+    # def buscarUserPorUsername(self, username):
+    #     for u in self.users:
+    #         if u.username == username:
+    #             return u
+    #     return None
 
-    def buscarUserPorId(self, id):
-        for u in self.users:
-            if u.id == id:
-                return u
-        return None
+    # def buscarUserPorId(self, id):
+    #     for u in self.users:
+    #         if u.id == id:
+    #             return u
+    #     return None

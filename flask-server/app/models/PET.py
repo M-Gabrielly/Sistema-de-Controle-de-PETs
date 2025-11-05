@@ -5,7 +5,6 @@ class PET:
         self.idade = idade
         self.especie = especie
         self.status = status
-        # dono_id referencia um Cliente.id (opcional)
         self.dono_id = dono_id
 
     def editarPet(self, nome=None, idade=None, especie=None, status=None, dono_id=None):

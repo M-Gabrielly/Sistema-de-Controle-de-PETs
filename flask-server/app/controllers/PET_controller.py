@@ -1,32 +1,34 @@
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, jsonify, request 
+#, current_app
 from app.models.PET import PET
 from app.models.SistemaPET import SistemaPET
-from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer as Serializer
-from itsdangerous import BadSignature, SignatureExpired
+# from werkzeug.security import generate_password_hash, check_password_hash
+# from itsdangerous import URLSafeTimedSerializer as Serializer
+# from itsdangerous import BadSignature, SignatureExpired
 
 pet_bp = Blueprint('pets', __name__)
 sistema = SistemaPET()
 
 
+##################### CRIAR PET #####################
 @pet_bp.route("/criar_pet", methods=['POST'])
 def criar_pet():
     # Pega json enviado do front
     data = request.get_json()
     print("Pet recebido:", data)
 
-    # Verifica se todos os campos foram preenchidos
-    campos_obrigatorios = ["nome", "idade", "especie", "status"]
+    # verifica se todos os campos foram preenchidos
+    campos_obrigatorios = ["nome", "idade", "especie", "status", 'dono_id']
     for campo in campos_obrigatorios:
         if not data.get(campo) or data.get(campo) == '':
             return jsonify({"message": f"O campo '{campo}' é obrigatório!"}), 400
     
-    # Verifica se o status é válido
+    # verifica se o status é válido
     status_validos = ["Atendido", "Aguardando atendimento", "Em consulta"]
     if data.get("status") not in status_validos:
         return jsonify({"message": "Status inválido!"}), 400
 
-    # Se veio dono_id, valida existência
+    # se veio dono_id, valida existência
     dono_id = data.get("dono_id")
     if dono_id is not None:
         dono = sistema.buscarClientePorId(int(dono_id))
@@ -37,6 +39,7 @@ def criar_pet():
     return jsonify({"message": "Pet criado com sucesso!"}), 201
 
 
+##################### ATUALIZAR PET #####################
 @pet_bp.route("/atualiza_status", methods=['POST'])
 def atualiza_status():
     # Pega json enviado do front
@@ -57,6 +60,7 @@ def atualiza_status():
     return jsonify({"message": "Status atualizado com sucesso!"}), 200
 
 
+##################### LISTAR PETS #####################
 @pet_bp.route("/listar_pets", methods=["GET"])
 def listar_pets():
     # Pega lista de pets do SistemaPET.py
@@ -65,7 +69,7 @@ def listar_pets():
     return jsonify({"pets": pets}), 200
 
 
-# --- rotas simples para clientes ---
+##################### CRIAR CLIENTE #####################
 @pet_bp.route("/criar_cliente", methods=["POST"])
 def criar_cliente():
     data = request.get_json()
@@ -81,6 +85,7 @@ def criar_cliente():
     return jsonify({"message": "Cliente criado com sucesso!", "cliente": novo}), 201
 
 
+##################### LISTAR CLIENTES #####################
 @pet_bp.route("/listar_clientes", methods=["GET"])
 def listar_clientes():
     clientes = sistema.listarClientes()
@@ -88,67 +93,70 @@ def listar_clientes():
     return jsonify({"clientes": clientes}), 200
 
 
-@pet_bp.route("/buscar_cliente/<int:id>", methods=["GET"])
-def buscar_cliente(id):
-    cliente = sistema.buscarClientePorId(id)
-    if cliente is None:
-        return jsonify({"message": "Cliente não encontrado"}), 404
-    return jsonify({"cliente": cliente.to_array()}), 200
+##################### BUSCAR CLIENTE POR ID #####################
+# @pet_bp.route("/buscar_cliente/<int:id>", methods=["GET"])
+# def buscar_cliente(id):
+#     cliente = sistema.buscarClientePorId(id)
+#     if cliente is None:
+#         return jsonify({"message": "Cliente não encontrado"}), 404
+#     return jsonify({"cliente": cliente.to_array()}), 200
 
 
-# --- rotas simples para auth (usuários) ---
-@pet_bp.route('/register', methods=['POST'])
-def register():
-    data = request.get_json() or {}
-    username = data.get('username')
-    password = data.get('password')
-    if not username or not password:
-        return jsonify({'message': 'username e password são obrigatórios'}), 400
+##################### REGISTRAR USUÁRIO #####################
+# @pet_bp.route('/register', methods=['POST'])
+# def register():
+#     data = request.get_json() or {}
+#     username = data.get('username')
+#     password = data.get('password')
+#     if not username or not password:
+#         return jsonify({'message': 'username e password são obrigatórios'}), 400
 
-    # verifica se já existe
-    if sistema.buscarUserPorUsername(username) is not None:
-        return jsonify({'message': 'username já cadastrado'}), 400
+#     # verifica se já existe
+#     if sistema.buscarUserPorUsername(username) is not None:
+#         return jsonify({'message': 'username já cadastrado'}), 400
 
-    password_hash = generate_password_hash(password)
-    user = sistema.cadastrarUser(username, password_hash)
-    return jsonify({'message': 'Usuário criado', 'user': user.to_public()}), 201
-
-
-@pet_bp.route('/login', methods=['POST'])
-def login():
-    data = request.get_json() or {}
-    username = data.get('username')
-    password = data.get('password')
-    if not username or not password:
-        return jsonify({'message': 'username e password são obrigatórios'}), 400
-
-    user = sistema.buscarUserPorUsername(username)
-    if user is None or not check_password_hash(user.password_hash, password):
-        return jsonify({'message': 'Credenciais inválidas'}), 401
-
-    secret = current_app.config.get('SECRET_KEY', 'troque-esta-chave-por-uma-segura')
-    s = Serializer(secret)
-    token = s.dumps({'id': user.id})
-    return jsonify({'message': 'Login bem-sucedido', 'token': token, 'user': user.to_public()}), 200
+#     password_hash = generate_password_hash(password)
+#     user = sistema.cadastrarUser(username, password_hash)
+#     return jsonify({'message': 'Usuário criado', 'user': user.to_public()}), 201
 
 
-@pet_bp.route('/me', methods=['GET'])
-def me():
-    auth = request.headers.get('Authorization', '')
-    if not auth.startswith('Bearer '):
-        return jsonify({'message': 'Token não fornecido'}), 401
-    token = auth.split(' ', 1)[1]
-    secret = current_app.config.get('SECRET_KEY', 'troque-esta-chave-por-uma-segura')
-    s = Serializer(secret)
-    try:
-        # valida com max_age em segundos
-        data = s.loads(token, max_age=3600)
-    except SignatureExpired:
-        return jsonify({'message': 'Token expirado'}), 401
-    except BadSignature:
-        return jsonify({'message': 'Token inválido'}), 401
+##################### LOGIN USUÁRIO #####################
+# @pet_bp.route('/login', methods=['POST'])
+# def login():
+#     data = request.get_json() or {}
+#     username = data.get('username')
+#     password = data.get('password')
+#     if not username or not password:
+#         return jsonify({'message': 'username e password são obrigatórios'}), 400
 
-    user = sistema.buscarUserPorId(data.get('id'))
-    if user is None:
-        return jsonify({'message': 'Usuário não encontrado'}), 404
-    return jsonify({'user': user.to_public()}), 200
+#     user = sistema.buscarUserPorUsername(username)
+#     if user is None or not check_password_hash(user.password_hash, password):
+#         return jsonify({'message': 'Credenciais inválidas'}), 401
+
+#     secret = current_app.config.get('SECRET_KEY', 'troque-esta-chave-por-uma-segura')
+#     s = Serializer(secret)
+#     token = s.dumps({'id': user.id})
+#     return jsonify({'message': 'Login bem-sucedido', 'token': token, 'user': user.to_public()}), 200
+
+
+##################### VERIFICAR AUTENTICAÇÃO #####################
+# @pet_bp.route('/me', methods=['GET'])
+# def me():
+#     auth = request.headers.get('Authorization', '')
+#     if not auth.startswith('Bearer '):
+#         return jsonify({'message': 'Token não fornecido'}), 401
+#     token = auth.split(' ', 1)[1]
+#     secret = current_app.config.get('SECRET_KEY', 'troque-esta-chave-por-uma-segura')
+#     s = Serializer(secret)
+#     try:
+#         # valida com max_age em segundos
+#         data = s.loads(token, max_age=3600)
+#     except SignatureExpired:
+#         return jsonify({'message': 'Token expirado'}), 401
+#     except BadSignature:
+#         return jsonify({'message': 'Token inválido'}), 401
+
+#     user = sistema.buscarUserPorId(data.get('id'))
+#     if user is None:
+#         return jsonify({'message': 'Usuário não encontrado'}), 404
+#     return jsonify({'user': user.to_public()}), 200
