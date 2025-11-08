@@ -1,16 +1,44 @@
-import { useState } from "react"
+import { useState } from 'react';
+import { Check, Clock, Stethoscope, ChevronDown } from 'lucide-react';
 import { MensagemAPI } from '../context/MensagemAPI';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
+
+const statusConfig = {
+  'Aguardando atendimento': {
+    bg: 'bg-[#fff3cd]',
+    text: 'text-[#856404]',
+    Icon: Clock,
+  },
+  'Em consulta': {
+    bg: 'bg-[#d0e4ff]',
+    text: 'text-[#007bff]',
+    Icon: Stethoscope,
+  },
+  'Atendido': {
+    bg: 'bg-[#d4edda]',
+    text: 'text-[#155724]',
+    Icon: Check,
+  },
+};
 
 function StatusDropdown(received) {
   const { showMessage } = MensagemAPI();
 
-  const [open, setOpen] = useState(false)
-  const [status, setStatus] = useState(received.status)
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState(received.status);
   const petId = received.id;
 
+  const config = statusConfig[status];
+  const Icon = config?.Icon || Clock;
+
   const handleSelect = (value) => {
-    setStatus(value)
-    setOpen(false)
+    setStatus(value);
+    setOpen(false);
     
     const petData = {
       id: petId,
@@ -25,68 +53,62 @@ function StatusDropdown(received) {
       body: JSON.stringify(petData)
     })
     .then(async res => {
-      // erro requisição
       const data = await res.json();
       
       if (!res.ok) {
-        // throw new Error(`Erro ${res.status}: ${data.message}`);
         throw new Error(`${data.message}`);
       }
       
       return data;
     })
     .then(responseData  => {
-      //deu tudo certo
       showMessage("Status editado com sucesso!", "success");
-      console.log("Resposta do servidor:", responseData );
+      console.log("Resposta do servidor:", responseData);
     })
-    // mostra erro
     .catch(err => {
         showMessage(`Erro ao editar status: ${err.message}`, "error");
-        console.error(err)
+        console.error(err);
     });
-  }
+  };
 
   return (
-    <div className="dropdown">
-      <button
-        type="button"
-        className="dropdown-btn"
-        onClick={() => setOpen(!open)}
-        style={{
-            backgroundColor:
-            status === 'Atendido'
-                ? '#d4edda' // verde claro
-                : status === 'Aguardando atendimento'
-                ? '#fff3cd' // amarelo claro
-                : '#d0e4ff', // azul
-            color:
-            status === 'Atendido'
-                ? '#155724'
-                : status === 'Aguardando atendimento'
-                ? '#856404'
-                : '#007bff'
-        }}
-      >
-        <span>{status}</span>
-        <i className={`arrow ${open ? "up" : "down"}`}></i>
-      </button>
-
-      {open && (
-        <div className="dropdown-menu">
-          <span className="dropdown-item status-atendido" onClick={() => handleSelect("Atendido")}>
-            Atendido
-          </span>
-          <span className="dropdown-item status-aguardando" onClick={() => handleSelect("Aguardando atendimento")}>
-            Aguardando atendimento
-          </span>
-          <span className="dropdown-item status-consulta" onClick={() => handleSelect("Em consulta")}>
-            Em consulta
-          </span>
-        </div>
-      )}
-    </div>
-  )
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={`${config?.bg || 'bg-gray-100'} ${config?.text || 'text-gray-700'} px-3 py-2 rounded-xl flex items-center gap-2 hover:opacity-80 transition-opacity w-full justify-between shadow-sm`}
+        >
+          <div className="flex items-center gap-2">
+            <Icon className="w-4 h-4" />
+            <span className="text-sm font-medium">{status}</span>
+          </div>
+          <ChevronDown className={`w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => handleSelect('Aguardando atendimento')}
+        >
+          <Clock className="w-4 h-4 mr-2 text-[#856404]" />
+          <span>Aguardando atendimento</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => handleSelect('Em consulta')}
+        >
+          <Stethoscope className="w-4 h-4 mr-2 text-[#007bff]" />
+          <span>Em consulta</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => handleSelect('Atendido')}
+        >
+          <Check className="w-4 h-4 mr-2 text-[#155724]" />
+          <span>Atendido</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
 
-export default StatusDropdown
+export default StatusDropdown;
