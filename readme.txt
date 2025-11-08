@@ -72,12 +72,20 @@ Aí entra na pasta PETs:
     cd client/PETS
 E instala as dependências:
     npm install
+Como estamos usando Tailwind CSS v4, é necessário instalar o pacote adicional do PostCSS:
+    npm install -D @tailwindcss/postcss
+Agora é só rodar o servidor do React:
+    npm run dev
+O front vai rodar em http://localhost:5173/
+
 Abre outro terminal para o back:
-    cd ./flask-server
-Cria e roda o ambiente virtual
+    cd flask-server
+Ativa o ambiente virtual:
+    .\venv\Scripts\Activate.ps1
+Caso o ambiente virtual não exista, crie com:
     python -m venv venv
-    venv\Scripts\activate
-Agora é só instalar as dependências:
+Agora é só instalar as dependências (se ainda não instalou):
     pip install -r requirements.txt
 E rodar o servidor:
     python server.py
+O back vai rodar em http://127.0.0.1:5000
